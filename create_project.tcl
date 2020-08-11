@@ -10,8 +10,9 @@ cd $project_directory
 add_files -fileset constrs_1 -norecurse constraints/ultra96_constraints.xdc
 
 # add source files
-add_files -fileset sources_1 -norecurse packages/riscv_opcodes.vhd
-add_files -fileset sources_1 -norecurse packages/riscv_types.vhd
-
+add_files -fileset sources_1 -norecurse packages/riscv_opcodes_pkg.vhd
+add_files -fileset sources_1 -norecurse packages/riscv_types_pkg.vhd
+add_files -fileset sources_1 -norecurse packages/riscv_control_pkg.vhd
+add_files -fileset sources_1 -norecurse rtl/1_IF_stage/IF_stage.vhd
 
 #update_compile_order -fileset sources_1
