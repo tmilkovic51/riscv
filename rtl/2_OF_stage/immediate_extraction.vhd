@@ -30,7 +30,7 @@ entity immediate_extraction is
         i_data              : in  word_t;           --! Input word (instruction)
         
         -- outputs
-        o_data              : out word_t;           --! Output (sign extended) word
+        o_data              : out word_t            --! Output (sign extended) word
     );
 end entity immediate_extraction;
 

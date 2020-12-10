@@ -22,6 +22,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 use work.riscv_types_pkg.all;
 use work.riscv_control_pkg.all;
 
@@ -33,12 +34,12 @@ entity IF_stage is
         i_rst                   : in  std_logic;        --! Synchronous reset
         i_ctrl                  : in  IF_stage_ctrl_t;  --! IF stage control signals
         i_instruction           : in  word_t;           --! Instruction fetched from memory
-        i_ex_stage_next_addr    : in  word t;           --! Next PC address calculated in EX pipeline stage
+        i_ex_stage_next_addr    : in  word_t;           --! Next PC address calculated in EX pipeline stage
         
         -- outputs
         o_address               : out address_t;        --! Address of the instruction to be fetched
-        o_instruction           : out word_t            --! Instruction forwarded to the next pipeline stage
-        o_pc                    : out address_t;        --! Program counter value forwarded to the next pipeline stage
+        o_instruction           : out word_t;           --! Instruction forwarded to the next pipeline stage
+        o_pc                    : out address_t         --! Program counter value forwarded to the next pipeline stage
     );
 end entity IF_stage;
 
@@ -54,9 +55,9 @@ architecture rtl of IF_stage is
 begin
 
     --! PC register update process with synchronous reset
-    PC_reg_update: process(clk)
-    begin:
-        if(rising_edge(clk)) then
+    PC_reg_update: process(i_clk)
+    begin
+        if(rising_edge(i_clk)) then
             if(i_rst = RESET_ACTIVE) then
                 pc_reg <= (others => '0');
             elsif(pc_reg_en = '1') then
@@ -66,7 +67,7 @@ begin
     end process PC_reg_update;
     
     -- don't increment PC register if pipeline is stalled
-    pc_reg_add4 <= pc_reg + 4 when i_ctrl.pipeline_stall = '0' else pc_reg;
+    pc_reg_add4 <= address_t(unsigned(pc_reg) + 4) when i_ctrl.pipeline_stall = '0' else pc_reg;
     
     -- enable or disable writes to PC register based on IF stage control signals
     pc_reg_en <= not i_ctrl.mem_wait;

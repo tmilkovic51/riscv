@@ -25,6 +25,9 @@ use ieee.std_logic_1164.all;
 use work.riscv_types_pkg.all;
 use work.riscv_control_pkg.all;
 
+use work.riscv_components_pkg.regset;
+use work.riscv_components_pkg.immediate_extraction;
+
 --! Operand fetch stage entity containing all generics and ports
 entity OF_stage is
     port(
@@ -34,21 +37,22 @@ entity OF_stage is
         i_ctrl                  : in  OF_stage_ctrl_t;  --! OF stage control signals
         i_instruction           : in  word_t;           --! Instruction forwarded from the previous pipeline stage
         i_pc                    : in  address_t;        --! Program counter value forwarded from the previous pipeline stage
-        i_rd_data               : in  wort_t;           --! Input data to be written to destination register
+        i_rd_data               : in  word_t;           --! Input data to be written to destination register
         
         -- outputs
         o_rs1_data              : out word_t;           --! Output data from source register 1
         o_rs2_data              : out word_t;           --! Output data from source register 2
-        o_immediate             : out word_t            --! Sign extended immediate value extracted from instruction
-        o_pc                    : out address_t;        --! Program counter value buffered and forwarded to the next pipeline stage
+        o_immediate             : out word_t;           --! Sign extended immediate value extracted from instruction
+        o_pc                    : out address_t         --! Program counter value buffered and forwarded to the next pipeline stage
     );
-end entity IF_stage;
+end entity OF_stage;
 
 
 --! Operand fetch stage RTL architecture
 architecture rtl of OF_stage is
 
     signal reg_en : std_logic;
+    signal pc_reg : address_t := (others => '0');
 
 begin
 
@@ -72,9 +76,9 @@ begin
     );
     
     --! Program counter buffering process
-    pc_buffer: process (clk) is
+    pc_buffer: process (i_clk) is
     begin
-        if(rising_edge(clk)) then
+        if(rising_edge(i_clk)) then
             if(i_rst = '1') then
                 pc_reg <= (others => '0');
             elsif(reg_en = '1') then

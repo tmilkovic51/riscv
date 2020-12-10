@@ -22,6 +22,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use work.riscv_types_pkg.all;
 
 package riscv_components_pkg is
     
@@ -33,11 +34,11 @@ package riscv_components_pkg is
             i_addr_b                : in  reg_address_t;    --! Register address for output port B
             i_addr_c                : in  reg_address_t;    --! Register address for input port C
             i_we                    : in  std_logic;        --! Write enable signal for input port C
-            i_data_c                : in  word_t            --! Data input into port C
+            i_data_c                : in  word_t;           --! Data input into port C
 
             -- outputs
             o_data_a                : out word_t;           --! Data output from port A
-            o_data_b                : out word_t;           --! Data output from port B
+            o_data_b                : out word_t            --! Data output from port B
         );
     end component regset;
     

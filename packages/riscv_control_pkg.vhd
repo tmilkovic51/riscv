@@ -20,6 +20,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use work.riscv_types_pkg.all;
 
 --! Package containing definitions of records with control signals for each pipeline stage
 package riscv_control_pkg is
