@@ -31,6 +31,7 @@ package riscv_types_pkg is
 
     constant REG_ADDRESS_SIZE : integer := 5;
     subtype reg_address_t is std_logic_vector(REG_ADDRESS_SIZE - 1 downto 0);
+    type regset_type is array ((2**REG_ADDRESS_SIZE) - 1 downto 0) of word_t;
 
     constant OPCODE_SIZE : integer := 7;
     subtype opcode_t is std_logic_vector(OPCODE_SIZE - 1 downto 0);

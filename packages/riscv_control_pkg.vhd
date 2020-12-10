@@ -28,9 +28,21 @@ package riscv_control_pkg is
     type IF_stage_ctrl_t is record
         pc_in_mux       : std_logic_vector(1 downto 0);     --! PC input multiplexor control signal
         pipeline_stall  : std_logic;                        --! Pipeline stall flag
+        mem_wait        : std_logic;                        --! Memory wait flag
     end record IF_stage_ctrl_t;
     
+    -- Instruction fetch stage related constants
     constant PC_IN_MUX_ADD4 : std_logic_vector(1 downto 0) := "00";         --! PC input MUX PC+4 selector
     constant PC_IN_MUX_EX_RESULT : std_logic_vector(1 downto 0) := "01";    --! PC input MUX EX stage result selector
+    
+    --! Operand fetch stage control signals record
+    type OF_stage_ctrl_t is record
+        rs1_addr        : reg_address_t;        --! Source register 1 address
+        rs2_addr        : reg_address_t;        --! Source register 2 address
+        rd_addr         : reg_address_t;        --! Destination register address
+        rd_we           : std_logic;            --! Destination register write enable
+        pipeline_stall  : std_logic;            --! Pipeline stall flag
+        mem_wait        : std_logic;            --! Memory wait flag
+    end record OF_stage_ctrl_t;
     
 end package riscv_control_pkg;
