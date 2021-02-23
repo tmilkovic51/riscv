@@ -27,6 +27,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.std_logic_misc.or_reduce;
 use work.riscv_types_pkg.all;
 use work.riscv_control_pkg.all;
 
@@ -51,22 +52,27 @@ end entity regset;
 architecture rtl of regset is
 
     signal registers        : regset_type   := (others => (others => '0')); --! Array of 2^REG_ADDRESS_SIZE registers
+    signal is_addr_c_not_x0 : std_logic     := '0';                         --! Is X0 register not addressed on port C
     constant REG_X0_ADDR    : reg_address_t := (others => '0' );            --! Register X0 (zero register) address 
 
 begin
-        
-	--! Data input process for port C
+
+    -- If any bit in port C address is set, the addressed register is not X0
+    is_addr_c_not_x0 <= or_reduce(i_addr_c);
+
+    --! Data input process for port C
     data_input: process (i_clk)
     begin
         if (rising_edge(i_clk)) then
-            if(i_we = '1') then
+            -- Write to regset only if write enable is active and X0 is not addressed
+            if((i_we = '1') and (is_addr_c_not_x0 = '1')) then
                 registers(to_integer(unsigned(i_addr_c))) <= i_data_c;
             end if;
         end if;
     end process data_input;
-	 
-	-- Data outputs - if register X0 is selected, output zero-word (RISC-V ISA specification)
-    o_data_a <= (others => '0') when i_addr_a = REG_X0_ADDR else registers(to_integer(unsigned(i_addr_a)));
-    o_data_b <= (others => '0') when i_addr_b = REG_X0_ADDR else registers(to_integer(unsigned(i_addr_b)));
+
+    -- Data outputs - X0 is never written to, so it always outputs 0 (RISC-V ISA specification)
+    o_data_a <= registers(to_integer(unsigned(i_addr_a)));
+    o_data_b <= registers(to_integer(unsigned(i_addr_b)));
 
 end architecture rtl;
