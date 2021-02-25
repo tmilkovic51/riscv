@@ -28,6 +28,7 @@ entity immediate_extraction is
     port(
         -- inputs
         i_data              : in  word_t;           --! Input word (instruction)
+        i_instr_format      : in  instr_format_t;   --! Instruction format control signal
         
         -- outputs
         o_data              : out word_t            --! Output (sign extended) word
@@ -37,11 +38,46 @@ end entity immediate_extraction;
 --! Immediate extraction and sign extension RTL architecture
 architecture rtl of immediate_extraction is
 
-
-
-
 begin
 
-
+    --! Combinational process for immediate extraction and sign extension
+    imm_extract: process(i_data, i_instr_format)
+    begin
+        case i_instr_format is
+            when U_TYPE =>
+                o_data <=
+                    (19 downto 0 => i_data(31 downto 12),
+                    others => i_data(31));
+            when J_TYPE =>
+                o_data <=
+                    (20 => i_data(31),
+                    19 downto 12 => i_data(19 downto 12),
+                    11 => i_data(20),
+                    10 downto 1 => i_data(30 downto 21),
+                    0 => '0',
+                    others => i_data(31));
+            when I_TYPE =>
+                o_data <=
+                    (11 downto 0 => i_data(31 downto 20),
+                    others => i_data(31));
+            when S_TYPE =>
+                o_data <=
+                    (11 downto 5 => i_data(31 downto 25),
+                    4 downto 0 => i_data(11 downto 7),
+                    others => i_data(31));
+            when B_TYPE =>
+                o_data <=
+                    (12 => i_data(31),
+                    11 => i_data(7),
+                    10 downto 5 => i_data(30 downto 25),
+                    4 downto 1 => i_data(11 downto 8),
+                    0 => '0',
+                    others => i_data(31));
+            when others =>
+                -- Instruction format does not have an immediate value
+                 o_data <= 
+                    (19 downto 0 => i_data(31 downto 11),
+                    others => i_data(31));
+    end process imm_extract;
 
 end architecture rtl;

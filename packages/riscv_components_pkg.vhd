@@ -45,6 +45,7 @@ package riscv_components_pkg is
     component immediate_extraction is
         port (
             i_data                  : in  word_t;           --! Input word (instruction)
+            i_instr_format          : in  instr_format_t;   --! Instruction format control signal
             o_data                  : out word_t            --! Output (sign extended) word
         );
 	end component immediate_extraction;

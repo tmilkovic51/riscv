@@ -58,21 +58,22 @@ begin
 
     --! Register set module
     regs: regset port map (
-        i_clk       => i_clk,
-        i_addr_a    => i_ctrl.rs1_addr,
-        i_addr_b    => i_ctrl.rs2_addr,
-        i_addr_c    => i_ctrl.rd_addr,
-        i_we        => i_ctrl.rd_we,
-        i_data_c    => i_rd_data,
+        i_clk           => i_clk,
+        i_addr_a        => i_ctrl.rs1_addr,
+        i_addr_b        => i_ctrl.rs2_addr,
+        i_addr_c        => i_ctrl.rd_addr,
+        i_we            => i_ctrl.rd_we,
+        i_data_c        => i_rd_data,
         
-        o_data_a    => o_rs1_data,
-        o_data_b    => o_rs2_data
+        o_data_a        => o_rs1_data,
+        o_data_b        => o_rs2_data
     );
     
     --! Immediate value extraction and sign extension module
     extend: immediate_extraction port map (
-        i_data      => i_instruction,
-        o_data      => o_immediate
+        i_data          => i_instruction,
+        i_instr_format  => i_ctrl.instr_format,
+        o_data          => o_immediate
     );
     
     --! Program counter buffering process
@@ -93,4 +94,3 @@ begin
     o_pc <= pc_reg;
 
 end architecture rtl;
-

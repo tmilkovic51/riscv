@@ -42,6 +42,7 @@ package riscv_control_pkg is
         rs2_addr        : reg_address_t;        --! Source register 2 address
         rd_addr         : reg_address_t;        --! Destination register address
         rd_we           : std_logic;            --! Destination register write enable
+        instr_format    : instr_format_t;       --! Instruction format
         pipeline_stall  : std_logic;            --! Pipeline stall flag
         mem_wait        : std_logic;            --! Memory wait flag
     end record OF_stage_ctrl_t;

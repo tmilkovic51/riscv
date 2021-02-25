@@ -18,13 +18,14 @@
 --!                 - output port B
 --!                 - input port C
 --!             Input port is synchronous, while output ports are asynchronous.
---!             If register X0 is selected to be output on either port A or B,
---!             a zero-word is output on that port (RISC-V ISA specification).
+--!             When rgister X0 is selected to be written on port C, the write
+--!             is ignored, so value of X0 always stays zero, as specified by
+--!             RISC-V ISA specification.
 --! @author     Tomislav Milkovic (tomislav.milkovic95@gmail.com)
 --! @copyright  Licensed under CERN-OHL-S v2
 -------------------------------------------------------------------------------
 
-library ieee;
+library ieee;,
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_misc.or_reduce;
@@ -53,7 +54,6 @@ architecture rtl of regset is
 
     signal registers        : regset_type   := (others => (others => '0')); --! Array of 2^REG_ADDRESS_SIZE registers
     signal is_addr_c_not_x0 : std_logic     := '0';                         --! Is X0 register not addressed on port C
-    constant REG_X0_ADDR    : reg_address_t := (others => '0' );            --! Register X0 (zero register) address 
 
 begin
 

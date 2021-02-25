@@ -42,6 +42,8 @@ package riscv_types_pkg is
     constant STATUS_SIZE : integer := 2;
     subtype status_t is std_logic_vector(STATUS_SIZE - 1 downto 0);
     
+    type instr_format_t is (U_TYPE, J_TYPE, R_TYPE, I_TYPE, I_SHIFT_TYPE, S_TYPE, B_TYPE);
+    
     constant RESET_ACTIVE : std_logic := '1';
     constant RESET_INACTIVE : std_logic := '0';
     
