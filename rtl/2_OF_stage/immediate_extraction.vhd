@@ -46,8 +46,8 @@ begin
         case i_instr_format is
             when U_TYPE =>
                 o_data <=
-                    (19 downto 0 => i_data(31 downto 12),
-                    others => i_data(31));
+                    (31 downto 12 => i_data(31 downto 12),
+                    others => '0');
             when J_TYPE =>
                 o_data <=
                     (20 => i_data(31),
@@ -60,6 +60,10 @@ begin
                 o_data <=
                     (11 downto 0 => i_data(31 downto 20),
                     others => i_data(31));
+            when I_SHIFT_TYPE =>
+                o_data <=
+                    (4 downto 0 => i_data(24 downto 20),
+                    others => '0');
             when S_TYPE =>
                 o_data <=
                     (11 downto 5 => i_data(31 downto 25),
