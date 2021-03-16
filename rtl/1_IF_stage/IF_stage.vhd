@@ -65,18 +65,18 @@ begin
             end if;
         end if;
     end process PC_reg_update;
-    
+
     -- don't increment PC register if pipeline is stalled
     pc_reg_add4 <= address_t(unsigned(pc_reg) + 4) when i_ctrl.pipeline_stall = '0' else pc_reg;
-    
+
     -- enable or disable writes to PC register based on IF stage control signals
     pc_reg_en <= not i_ctrl.mem_wait;
-    
+
     -- PC register input multiplexor
     with i_ctrl.pc_in_mux select pc_in <=
         i_ex_stage_next_addr when PC_IN_MUX_EX_RESULT,  -- input to PC register is result from EX pipeline stage
         pc_reg_add4 when others;                        -- input to PC register is current PC register value + 4
-        
+
     -- assign output signals
     o_address <= pc_reg;
     o_instruction <= i_instruction;

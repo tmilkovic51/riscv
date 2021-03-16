@@ -25,7 +25,7 @@ use ieee.std_logic_1164.all;
 use work.riscv_types_pkg.all;
 
 package riscv_components_pkg is
-    
+
     component regset is
         port (
             -- inputs
@@ -41,13 +41,16 @@ package riscv_components_pkg is
             o_data_b                : out word_t            --! Data output from port B
         );
     end component regset;
-    
+
     component immediate_extraction is
         port (
+            -- inputs
             i_data                  : in  word_t;           --! Input word (instruction)
             i_instr_format          : in  instr_format_t;   --! Instruction format control signal
+            
+            -- outputs
             o_data                  : out word_t            --! Output (sign extended) word
         );
-	end component immediate_extraction;
-    
+    end component immediate_extraction;
+
 end package riscv_components_pkg;

@@ -68,14 +68,14 @@ begin
         o_data_a        => o_rs1_data,
         o_data_b        => o_rs2_data
     );
-    
+
     --! Immediate value extraction and sign extension module
     extend: immediate_extraction port map (
         i_data          => i_instruction,
         i_instr_format  => i_ctrl.instr_format,
         o_data          => o_immediate
     );
-    
+
     --! Program counter buffering process
     pc_buffer: process (i_clk) is
     begin

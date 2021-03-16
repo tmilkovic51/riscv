@@ -18,5 +18,6 @@ add_files -fileset sources_1 -norecurse rtl/1_IF_stage/IF_stage.vhd
 add_files -fileset sources_1 -norecurse rtl/2_OF_stage/regset.vhd
 add_files -fileset sources_1 -norecurse rtl/2_OF_stage/immediate_extraction.vhd
 add_files -fileset sources_1 -norecurse rtl/2_OF_stage/OF_stage.vhd
+add_files -fileset sources_1 -norecurse rtl/3_EX_stage/EX_stage.vhd
 
 #update_compile_order -fileset sources_1
