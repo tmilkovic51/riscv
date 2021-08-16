@@ -66,7 +66,7 @@ begin
 
     --! ALU operand 2 selection multiplexor
     with i_ctrl.alu_operand2_mux select
-        alu_operand <=
+        alu_operand2 <=
             imm_reg when ALU_OPERAND2_MUX_IMM,
             rs2_reg when others;
 
