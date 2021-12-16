@@ -82,6 +82,7 @@ begin
                  o_data <= 
                     (19 downto 0 => i_data(31 downto 11),
                     others => i_data(31));
+        end case;
     end process imm_extract;
 
 end architecture rtl;
