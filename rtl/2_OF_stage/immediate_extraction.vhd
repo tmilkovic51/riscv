@@ -41,7 +41,7 @@ architecture rtl of immediate_extraction is
 begin
 
     --! Combinational process for immediate extraction and sign extension
-    imm_extract: process(i_data, i_instr_format)
+    imm_extract: process(i_data, i_instr_format) is
     begin
         case i_instr_format is
             when U_TYPE =>
