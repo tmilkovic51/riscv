@@ -39,7 +39,7 @@ entity EX_stage is
         i_pc                    : in  address_t;        --! Program counter value forwarded from the previous pipeline stage
         
         -- outputs
-        o_result                : out word_t;           --! Result of ALU operation
+        o_result                : out word_t            --! Result of ALU operation
     );
 end entity EX_stage;
 
