@@ -28,6 +28,8 @@ use work.riscv_control_pkg.all;
 use work.riscv_components_pkg.IF_stage;
 use work.riscv_components_pkg.OF_stage;
 use work.riscv_components_pkg.EX_stage;
+use work.riscv_components_pkg.MEM_stage;
+use work.riscv_components_pkg.WB_stage;
 
 --! Top module entity containing all generics and ports
 entity riscv_top is
@@ -43,7 +45,8 @@ entity riscv_top is
         -- outputs
         o_instr_mem_addr        : out address_t;        --! Program counter value (address in instruction memory)
         o_data_mem_addr         : out address_t;        --! Data memory address
-        o_data_mem_wr           : out std_logic         --! Data memory read or write signal
+        o_data_mem_word         : out word_t;           --! Word to be writen to data memory
+        o_data_mem_rw           : out std_logic         --! Data memory read or write signal
     );
 end entity riscv_top;
 
@@ -63,6 +66,12 @@ architecture structural of riscv_top is
 
     signal ex_stage_control         : EX_stage_ctrl_t;
     signal ex_stage_result          : word_t;
+
+    signal mem_stage_control        : MEM_stage_ctrl_t;
+    signal mem_stage_result         : word_t;
+
+    signal wb_stage_control         : WB_stage_ctrl_t;
+    signal wb_stage_data            : word_t;
 
 begin
 
@@ -89,7 +98,7 @@ begin
         i_ctrl                      => of_stage_control,
         i_instruction               => if_stage_instruction,
         i_pc                        => if_stage_pc,
-        i_rd_data                   => (others => '0'), -- connect to WB stage output data when WB stage is finished
+        i_rd_data                   => wb_stage_data,
 
         -- outputs
         o_rs1_data                  => of_stage_rs1_data,
@@ -111,6 +120,35 @@ begin
 
         -- outputs
         o_result                    => ex_stage_result
+    );
+
+    --! Memory access pipeline stage instance
+    MEM_stage_inst: MEM_stage port map (
+        -- inputs
+        i_clk                       => i_clk,
+        i_rst                       => i_rst,
+        i_ctrl                      => mem_stage_control,
+        i_mem_addr                  => ex_stage_result, -- TODO: add different EX stage outputs for address and data
+        i_mem_write_data            => ex_stage_result, -- TODO: add different EX stage outputs for address and data
+        i_mem_read_data             => i_data_mem_word,
+
+        -- outputs
+        o_mem_addr                  => o_data_mem_addr,
+        o_mem_rw                    => o_data_mem_rw,
+        o_mem_write_data            => o_data_mem_word,
+        o_mem_read_data             => mem_stage_result
+    );
+
+    --! Memory access pipeline stage instance
+    WB_stage_inst: WB_stage port map (
+        -- inputs
+        i_clk                       => i_clk,
+        i_rst                       => i_rst,
+        i_ctrl                      => wb_stage_control,
+        i_data                      => mem_stage_result,
+
+        -- outputs
+        o_data                      => wb_stage_data
     );
 
 end architecture structural;

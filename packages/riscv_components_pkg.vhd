@@ -105,4 +105,35 @@ package riscv_components_pkg is
         );
     end component EX_stage;
 
+    component MEM_stage is
+        port(
+            -- inputs
+            i_clk                   : in  std_logic;        --! Clock
+            i_rst                   : in  std_logic;        --! Synchronous reset
+            i_ctrl                  : in  MEM_stage_ctrl_t; --! MEM stage control signals
+            i_mem_addr              : in  address_t;        --! Address to be output to data memory
+            i_mem_write_data        : in  word_t;           --! Data to write to memory
+            i_mem_read_data         : in  word_t;           --! Data read from memory
+
+            -- outputs
+            o_mem_addr              : out address_t;        --! Address in data memory for which read/write operation will be issued
+            o_mem_rw                : out std_logic;        --! Data memory read or write operation
+            o_mem_write_data        : out word_t;           --! Data to write to memory
+            o_mem_read_data         : out word_t            --! Data read from memory
+        );
+    end component MEM_stage;
+
+    component WB_stage is
+        port(
+            -- inputs
+            i_clk                   : in  std_logic;        --! Clock
+            i_rst                   : in  std_logic;        --! Synchronous reset
+            i_ctrl                  : in  WB_stage_ctrl_t;  --! WB stage control signals
+            i_data                  : in  word_t;           --! Data from MEM stage to be forwarded to the register set
+
+            -- outputs
+            o_data                  : out word_t            --! Data to be written to the destination register
+        );
+    end component WB_stage;
+
 end package riscv_components_pkg;

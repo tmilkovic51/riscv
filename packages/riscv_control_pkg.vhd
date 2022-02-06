@@ -64,4 +64,18 @@ package riscv_control_pkg is
         mem_wait            : std_logic;        --! Memory wait flag
     end record EX_stage_ctrl_t;
 
+     -- Memory access stage related constants
+    constant MEM_READ   : std_logic := '0';      --! Data memory read signal value
+    constant MEM_WRITE  : std_logic := '1';      --! Data memory write signal value
+
+    --! Memory access stage control signals record
+    type MEM_stage_ctrl_t is record
+        mem_rw              : std_logic;        --! Data memory read or write signal
+    end record MEM_stage_ctrl_t;
+
+    --! Write-back stage control signals record
+    type WB_stage_ctrl_t is record
+        dummy              : std_logic;         --! No control signals for WB stage
+    end record WB_stage_ctrl_t;
+
 end package riscv_control_pkg;
