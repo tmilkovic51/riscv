@@ -25,10 +25,12 @@
 --! @copyright  Licensed under CERN-OHL-S v2
 -------------------------------------------------------------------------------
 
-library ieee;,
+library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_misc.or_reduce;
+
+library work;
 use work.riscv_types_pkg.all;
 use work.riscv_control_pkg.all;
 
@@ -37,6 +39,7 @@ entity regset is
     port(
         -- inputs
         i_clk                   : in  std_logic;        --! Clock
+        i_rst                   : in  std_logic;        --! Synchronous reset
         i_addr_a                : in  reg_address_t;    --! Register address for output port A
         i_addr_b                : in  reg_address_t;    --! Register address for output port B
         i_addr_c                : in  reg_address_t;    --! Register address for input port C
@@ -49,23 +52,28 @@ entity regset is
     );
 end entity regset;
 
+
 --! Register set RTL architecture
 architecture rtl of regset is
 
     signal registers        : regset_type   := (others => (others => '0')); --! Array of 2^REG_ADDRESS_SIZE registers
-    signal is_addr_c_not_x0 : std_logic     := '0';                         --! Is X0 register not addressed on port C
+    signal addr_c_is_x0     : std_logic     := '0';                         --! Is X0 register addressed on port C
 
 begin
 
-    -- If any bit in port C address is set, the addressed register is not X0
-    is_addr_c_not_x0 <= or_reduce(i_addr_c);
+    -- If no bits in port C address are set, the addressed register is X0 (the register with constant zero value)
+    addr_c_is_x0 <= not or_reduce(i_addr_c);
 
     --! Data input process for port C
     data_input: process (i_clk)
     begin
         if (rising_edge(i_clk)) then
+            -- Check if reset here is needed (synthesis tools may infer registers instead of distributed RAM)
+            if(i_rst = '1') then
+                registers <= (others => (others => '0'));
             -- Write to regset only if write enable is active and X0 is not addressed
-            if((i_we = '1') and (is_addr_c_not_x0 = '1')) then
+            -- (that way the X0 will never be written to and its value will remain 0 forever)
+            elsif((i_we = '1') and (addr_c_is_x0 = '0')) then
                 registers(to_integer(unsigned(i_addr_c))) <= i_data_c;
             end if;
         end if;

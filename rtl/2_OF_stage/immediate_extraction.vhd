@@ -20,6 +20,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+
+library work;
 use work.riscv_types_pkg.all;
 use work.riscv_control_pkg.all;
 
@@ -34,6 +36,7 @@ entity immediate_extraction is
         o_data              : out word_t            --! Output (sign extended) word
     );
 end entity immediate_extraction;
+
 
 --! Immediate extraction and sign extension RTL architecture
 architecture rtl of immediate_extraction is
@@ -80,7 +83,7 @@ begin
             when others =>
                 -- Instruction format does not have an immediate value
                  o_data <= 
-                    (19 downto 0 => i_data(31 downto 11),
+                    (19 downto 0 => i_data(31 downto 12),
                     others => i_data(31));
         end case;
     end process imm_extract;

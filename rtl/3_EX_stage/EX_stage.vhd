@@ -21,10 +21,11 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+
+library work;
 use work.riscv_types_pkg.all;
 use work.riscv_control_pkg.all;
-
-use work.riscv_components_pkg.all
+use work.riscv_components_pkg.all;
 
 --! Execution stage entity containing all generics and ports
 entity EX_stage is
@@ -76,9 +77,9 @@ begin
         if(rising_edge(i_clk)) then
             if(i_rst = '1') then
                 pc_reg <= (others => '0');
-                imm_reg <= (othrrs => '0');
-                rs1_reg <= (othrrs => '0');
-                rs2_reg <= (othrrs => '0');
+                imm_reg <= (others => '0');
+                rs1_reg <= (others => '0');
+                rs2_reg <= (others => '0');
             elsif(reg_en = '1') then
                 pc_reg <= i_pc;
                 imm_reg <= i_immediate;

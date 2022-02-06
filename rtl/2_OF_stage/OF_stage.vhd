@@ -22,9 +22,10 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+
+library work;
 use work.riscv_types_pkg.all;
 use work.riscv_control_pkg.all;
-
 use work.riscv_components_pkg.regset;
 use work.riscv_components_pkg.immediate_extraction;
 
@@ -59,6 +60,7 @@ begin
     --! Register set module
     regs: regset port map (
         i_clk           => i_clk,
+        i_rst           => i_rst,
         i_addr_a        => i_ctrl.rs1_addr,
         i_addr_b        => i_ctrl.rs2_addr,
         i_addr_c        => i_ctrl.rd_addr,
