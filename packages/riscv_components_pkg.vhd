@@ -136,4 +136,20 @@ package riscv_components_pkg is
         );
     end component WB_stage;
 
+    component control_unit is
+        port(
+            -- inputs
+            i_clk                   : in  std_logic;        --! Clock
+            i_rst                   : in  std_logic;        --! Synchronous reset
+            i_instruction           : in  word_t;           --! Instruction received from IF stage
+
+            -- outputs
+            o_if_stage_ctrl         : out IF_stage_ctrl_t;  --! IF stage control signals
+            o_of_stage_ctrl         : out OF_stage_ctrl_t;  --! OF stage control signals
+            o_ex_stage_ctrl         : out EX_stage_ctrl_t;  --! EX stage control signals
+            o_mem_stage_ctrl        : out MEM_stage_ctrl_t; --! MEM stage control signals
+            o_wb_stage_ctrl         : out WB_stage_ctrl_t   --! WB stage control signals
+        );
+    end component control_unit;
+
 end package riscv_components_pkg;

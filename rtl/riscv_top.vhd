@@ -30,6 +30,7 @@ use work.riscv_components_pkg.OF_stage;
 use work.riscv_components_pkg.EX_stage;
 use work.riscv_components_pkg.MEM_stage;
 use work.riscv_components_pkg.WB_stage;
+use work.riscv_components_pkg.control_unit;
 
 --! Top module entity containing all generics and ports
 entity riscv_top is
@@ -139,7 +140,7 @@ begin
         o_mem_read_data             => mem_stage_result
     );
 
-    --! Memory access pipeline stage instance
+    --! Write-back pipeline stage instance
     WB_stage_inst: WB_stage port map (
         -- inputs
         i_clk                       => i_clk,
@@ -149,6 +150,21 @@ begin
 
         -- outputs
         o_data                      => wb_stage_data
+    );
+
+    --! CPU control unit instance
+    control_unit_inst: control_unit port map (
+        -- inputs
+        i_clk                       => i_clk,
+        i_rst                       => i_rst,
+        i_instruction               => if_stage_instruction,
+
+        -- outputs
+        o_if_stage_ctrl             => if_stage_control,
+        o_of_stage_ctrl             => of_stage_control,
+        o_ex_stage_ctrl             => ex_stage_control,
+        o_mem_stage_ctrl            => mem_stage_control,
+        o_wb_stage_ctrl             => wb_stage_control
     );
 
 end architecture structural;

@@ -22,6 +22,7 @@ add_files -fileset sources_1 -norecurse rtl/2_OF_stage/OF_stage.vhd
 add_files -fileset sources_1 -norecurse rtl/3_EX_stage/EX_stage.vhd
 add_files -fileset sources_1 -norecurse rtl/4_MEM_stage/MEM_stage.vhd
 add_files -fileset sources_1 -norecurse rtl/5_WB_stage/WB_stage.vhd
+add_files -fileset sources_1 -norecurse rtl/control_unit/control_unit.vhd
 add_files -fileset sources_1 -norecurse rtl/riscv_top.vhd
 
 # set VHDL-2008 property for all VHDL files

@@ -10,10 +10,10 @@
 -- PARTICULAR PURPOSE. Please see the CERN-OHL-S v2 for applicable conditions.
 -------------------------------------------------------------------------------
 --! @file       WB_stage.vhd
---! @brief      Write-back stage module RTL implementation
---! @details    This stage receives the data from MEM stage and forwards it to
---!             the register set to be written to the destination register (Rd)
---!             in case instruction result needs to be stored.
+--! @brief      CPU control unit module RTL implementation
+--! @details    This module sets receives instruction from IF stage and sets
+--!             control signals for all pipeline stages depending on the
+--!             instruction.
 --! @author     Tomislav Milkovic (tomislav.milkovic95@gmail.com)
 --! @copyright  Licensed under CERN-OHL-S v2
 -------------------------------------------------------------------------------
@@ -25,26 +25,27 @@ library work;
 use work.riscv_types_pkg.all;
 use work.riscv_control_pkg.all;
 
---! Write-back stage entity containing all generics and ports
-entity WB_stage is
+--! CPU control unit entity containing all generics and ports
+entity control_unit is
     port(
         -- inputs
         i_clk                   : in  std_logic;        --! Clock
         i_rst                   : in  std_logic;        --! Synchronous reset
-        i_ctrl                  : in  WB_stage_ctrl_t;  --! WB stage control signals
-        i_data                  : in  word_t;           --! Data from MEM stage to be forwarded to the register set
+        i_instruction           : in  word_t;           --! Instruction received from IF stage
 
         -- outputs
-        o_data                  : out word_t            --! Data to be written to the destination register
+        o_if_stage_ctrl         : out IF_stage_ctrl_t;  --! IF stage control signals
+        o_of_stage_ctrl         : out OF_stage_ctrl_t;  --! OF stage control signals
+        o_ex_stage_ctrl         : out EX_stage_ctrl_t;  --! EX stage control signals
+        o_mem_stage_ctrl        : out MEM_stage_ctrl_t; --! MEM stage control signals
+        o_wb_stage_ctrl         : out WB_stage_ctrl_t   --! WB stage control signals
     );
-end entity WB_stage;
+end entity control_unit;
 
 
---! Write-back stage RTL architecture
-architecture rtl of WB_stage is
+--! CPU control unit RTL architecture
+architecture rtl of control_unit is
 
 begin
-
-    o_data <= i_data;
 
 end architecture rtl;
