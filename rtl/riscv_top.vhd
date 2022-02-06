@@ -66,7 +66,8 @@ architecture structural of riscv_top is
     signal of_stage_pc              : address_t;
 
     signal ex_stage_control         : EX_stage_ctrl_t;
-    signal ex_stage_result          : word_t;
+    signal ex_stage_alu_result      : word_t;
+    signal ex_stage_rs2_data        : word_t;
 
     signal mem_stage_control        : MEM_stage_ctrl_t;
     signal mem_stage_result         : word_t;
@@ -83,7 +84,7 @@ begin
         i_rst                       => i_rst,
         i_ctrl                      => if_stage_control,
         i_instruction               => i_instr_mem_word,
-        i_ex_stage_next_addr        => ex_stage_result,
+        i_ex_stage_next_addr        => ex_stage_alu_result,
 
         -- outputs
         o_address                   => o_instr_mem_addr,
@@ -120,7 +121,8 @@ begin
         i_pc                        => of_stage_pc,
 
         -- outputs
-        o_result                    => ex_stage_result
+        o_alu_result                => ex_stage_alu_result,
+        o_rs2                       => ex_stage_rs2_data
     );
 
     --! Memory access pipeline stage instance
@@ -129,8 +131,8 @@ begin
         i_clk                       => i_clk,
         i_rst                       => i_rst,
         i_ctrl                      => mem_stage_control,
-        i_mem_addr                  => ex_stage_result, -- TODO: add different EX stage outputs for address and data
-        i_mem_write_data            => ex_stage_result, -- TODO: add different EX stage outputs for address and data
+        i_mem_addr                  => ex_stage_alu_result,
+        i_mem_write_data            => ex_stage_rs2_data,
         i_mem_read_data             => i_data_mem_word,
 
         -- outputs

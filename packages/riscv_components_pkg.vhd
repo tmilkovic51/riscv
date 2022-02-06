@@ -101,7 +101,8 @@ package riscv_components_pkg is
             i_pc                    : in  address_t;        --! Program counter value forwarded from the previous pipeline stage
 
             -- outputs
-            o_result                : out word_t            --! Result of ALU operation
+            o_alu_result            : out word_t;           --! Result of ALU operation
+            o_rs2                   : out word_t            --! Rs2 register forwarded from OF stage (needed for load and store instructions)
         );
     end component EX_stage;
 

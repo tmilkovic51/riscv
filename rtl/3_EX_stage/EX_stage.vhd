@@ -40,7 +40,8 @@ entity EX_stage is
         i_pc                    : in  address_t;        --! Program counter value forwarded from the previous pipeline stage
         
         -- outputs
-        o_result                : out word_t            --! Result of ALU operation
+        o_alu_result            : out word_t;           --! Result of ALU operation
+        o_rs2                   : out word_t            --! Rs2 register forwarded from OF stage (needed for load and store instructions)
     );
 end entity EX_stage;
 
@@ -90,5 +91,6 @@ begin
     end process operand_buffer;
 
     reg_en <= not i_ctrl.mem_wait;
+    o_rs2 <= rs2_reg;
 
 end architecture rtl;
